@@ -6,4 +6,4 @@ Render using `pypy3` (~2800 secs):
 
 # Resources
 - https://scratchapixel.com/lessons/3d-basic-rendering/introduction-to-ray-tracing/how-does-it-work.html
-- https://raytracing.github.io/books/RayTracingInOneWeekend.html
+- [_Ray Tracing in One Weekend_](https://raytracing.github.io/books/RayTracingInOneWeekend.html)
