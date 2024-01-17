@@ -1,3 +1,8 @@
-/venv
+venv/
 image.ppm
 raytracer_document.pdf
+final_render.ppm
+final_render.png
+*.ppm
+past_renders/lambertian/gamma_ppm
+past_renders/lambertian/linear_ppm
