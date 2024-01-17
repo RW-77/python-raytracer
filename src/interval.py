@@ -1,6 +1,6 @@
 from math import inf
 
-class interval:
+class Interval:
 
     EMTPY = None
     UNIVERSE = None
@@ -24,5 +24,5 @@ class interval:
             return self.upper_b
         return x
     
-interval.EMPTY = interval(inf, -inf)
-interval.UNIVERSE = interval(-inf, inf)
+Interval.EMPTY = Interval(inf, -inf)
+Interval.UNIVERSE = Interval(-inf, inf)

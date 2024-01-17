@@ -1,18 +1,18 @@
 from abc import ABC, abstractmethod
 
-from utils import ray, vec3, point3, dot
-from utils import interval
+from utils import Ray, Vector, Point, dot
+from utils import Interval
 
-class hit_record:
+class HitRecord:
 
-    def __init__(self, p: point3 = None, normal: vec3 = None, mat = None, t: float = None, front_face: bool = None) -> None:
+    def __init__(self, p: Point = None, normal: Vector = None, mat = None, t: float = None, front_face: bool = None) -> None:
         self.p = p
         self.normal = normal
         self.mat = mat
         self.t = t
         self.front_face = front_face
     
-    def set_face_normal(self, _r: ray, _outward_normal: vec3) -> None:
+    def set_face_normal(self, _r: Ray, _outward_normal: Vector) -> None:
         '''sets the hit record normal vector (determines orietation)'''
         '''_outward_normal is assumed to be of unit length'''
         
@@ -26,8 +26,8 @@ class hit_record:
         self.t = other.t
         self.front_face = other.front_face
 
-class hittable(ABC):
+class Hittable(ABC):
 
     @abstractmethod
-    def hit(_r: ray, ray_t: interval, rec: hit_record) -> bool:
+    def hit(_r: Ray, ray_t: Interval, rec: HitRecord) -> bool:
         pass

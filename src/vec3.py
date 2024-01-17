@@ -5,7 +5,7 @@ from typing import Any
 
 from utils import rand_float
 
-class vec3:
+class Vector:
     te = "Unsupported operand type for {op}."
 
     # constructor
@@ -24,14 +24,14 @@ class vec3:
 
     # vector negation
     def __neg__(self):
-        return vec3(-self.x, -self.y, -self.z)
+        return Vector(-self.x, -self.y, -self.z)
     
     # vector addition
     def __add__(self, v):
-        if isinstance(v, vec3):
-            return vec3(self.x + v.x, self.y + v.y, self.z + v.z)
+        if isinstance(v, Vector):
+            return Vector(self.x + v.x, self.y + v.y, self.z + v.z)
         else:
-            raise TypeError(vec3.te.format(op="vector addition") + f": {type(v)}")
+            raise TypeError(Vector.te.format(op="vector addition") + f": {type(v)}")
 
     def __radd__(self, v):
         sys.stderr.write(f"\n\n{type(self)} {type(v)}\n")
@@ -39,40 +39,40 @@ class vec3:
 
     # in-place vector addition
     def __iadd__(self, v):
-        if isinstance(v, vec3):
+        if isinstance(v, Vector):
             self.x += v.x
             self.y += v.y
             self.z += v.z
         else:
-            raise TypeError(vec3.te.format(op="in-place vector addition"))
+            raise TypeError(Vector.te.format(op="in-place vector addition"))
 
     # vector subtraction
     def __sub__(self, v):
-        if isinstance(v, vec3):
-            return vec3(self.x - v.x, self.y - v.y, self.z - v.z)
+        if isinstance(v, Vector):
+            return Vector(self.x - v.x, self.y - v.y, self.z - v.z)
         else:
-            raise TypeError(vec3.te.format(op="vector subtraction"))
+            raise TypeError(Vector.te.format(op="vector subtraction"))
 
     def __rsub__(self, v):
         return self.__sub__(v)
 
     # in-place vector subtraction
     def __isub__(self, v):
-        if isinstance(v, vec3):
+        if isinstance(v, Vector):
             self.x -= v.x
             self.y -= v.y
             self.z -= v.z
         else:
-            raise TypeError(vec3.te.format(op="in-place vector subtraction"))
+            raise TypeError(Vector.te.format(op="in-place vector subtraction"))
 
     # scalar/vector multiplication
     def __mul__(self, v):
         if isinstance(v, (int, float)):
-            return vec3(self.x * v, self.y * v, self.z * v)
-        if isinstance(v, vec3):
-            return vec3(self.x * v.x, self.y * v.y, self.z * v.z)
+            return Vector(self.x * v, self.y * v, self.z * v)
+        if isinstance(v, Vector):
+            return Vector(self.x * v.x, self.y * v.y, self.z * v.z)
         else:
-            raise TypeError(vec3.te.format(op="scalar/vector multiplication"))
+            raise TypeError(Vector.te.format(op="scalar/vector multiplication"))
 
     def __rmul__(self, v):
         return self.__mul__(v)
@@ -85,7 +85,7 @@ class vec3:
             self.z *= s
             return self
         else:
-            raise TypeError(vec3.te.format(op="in-place scalar multiplication"))
+            raise TypeError(Vector.te.format(op="in-place scalar multiplication"))
 
     # scalar division
     def __truediv__(self, v):
@@ -95,7 +95,7 @@ class vec3:
             else:
                 raise ValueError("Unsupported: division by 0.")
         else:
-            raise TypeError(vec3.te.format(op="scalar division"))
+            raise TypeError(Vector.te.format(op="scalar division"))
         
     # in-place scalar division
     def __itruediv__(self, s):
@@ -105,7 +105,7 @@ class vec3:
             else:
                 raise ValueError("Unsupported: diviwsion by 0.")
         else:
-            raise TypeError(vec3.te.format(op="in-place scalar division"))
+            raise TypeError(Vector.te.format(op="in-place scalar division"))
 
     # vector magnitude
     def length(self):
@@ -127,10 +127,10 @@ class vec3:
             return cls(rand_float(), rand_float(), rand_float())
             
 
-from utils import interval
+from utils import Interval
 
 global rgb, point3
-rgb = point3 = vec3
+RGB = Point = Vector
 
 # dot product
 def dot(v1, v2):
@@ -138,7 +138,7 @@ def dot(v1, v2):
 
 # cross product
 def cross(v1, v2):
-    return vec3(v1.y*v2.z - v1.z*v2.y, -v1.x*v2.z + v1.z*v2.x,  v1.x*v2.y - v1.y*v2.x)
+    return Vector(v1.y*v2.z - v1.z*v2.y, -v1.x*v2.z + v1.z*v2.x,  v1.x*v2.y - v1.y*v2.x)
 
 # normalizer
 def normalize(v):
@@ -148,38 +148,38 @@ def normalize(v):
 
 def rand_in_unit_disk():
     while True:
-        p: vec3 = vec3(rand_float(-1,1), rand_float(-1,1), 0)
+        p: Vector = Vector(rand_float(-1,1), rand_float(-1,1), 0)
         if p.length_squared() < 1: # within unit sphere
             return p
         
-def rand_unit_vec() -> vec3:
+def rand_unit_vec() -> Vector:
     '''returns random vector ON unit sphere'''
 
     while True:
-        p: vec3 = vec3.random(-1, 1)
+        p: Vector = Vector.random(-1, 1)
         if p.length_squared() < 1: # within unit sphere
             break
     return normalize(p)
 
-def rand_on_hemisphere(normal: vec3) -> vec3:
-    on_unit_sphere: vec3 = rand_unit_vec()
+def rand_on_hemisphere(normal: Vector) -> Vector:
+    on_unit_sphere: Vector = rand_unit_vec()
     if dot(on_unit_sphere, normal) > 0.0: # same hemisphere as normal
         return on_unit_sphere
     else:
         return -on_unit_sphere
     
-def reflect(_v: vec3, _n: vec3) -> vec3:
+def reflect(_v: Vector, _n: Vector) -> Vector:
     return _v - 2*dot(_v, _n)*_n
 
-def refract(_uv: vec3, _n: vec3, etai_over_etat) -> vec3:
+def refract(_uv: Vector, _n: Vector, etai_over_etat) -> Vector:
     '''refrective function which accepts a surface normal vector and unrefracted vector'''
     '''returns refracted vector'''
 
     cos_theta: float = min(dot(-_uv, _n), 1.0)
     sin_theta: float = math.sqrt(1.0 - cos_theta*cos_theta)
 
-    r_out_perp: vec3 = etai_over_etat * (_uv + cos_theta*_n)
-    r_out_parallel: vec3 = -math.sqrt(abs(1.0 - r_out_perp.length_squared())) * _n
+    r_out_perp: Vector = etai_over_etat * (_uv + cos_theta*_n)
+    r_out_parallel: Vector = -math.sqrt(abs(1.0 - r_out_perp.length_squared())) * _n
 
     return r_out_perp + r_out_parallel
     
@@ -188,9 +188,9 @@ def refract(_uv: vec3, _n: vec3, etai_over_etat) -> vec3:
 #     return math.sqrt(linear_component)
 
 # write to ppm file
-def write_color(out, pixel_color: rgb, samples_per_pixel: int):
+def write_color(out, pixel_color: RGB, samples_per_pixel: int):
     if not hasattr(write_color, '_intensity'):
-        write_color._intensity = interval(0.000, 0.999)
+        write_color._intensity = Interval(0.000, 0.999)
 
     r = pixel_color.x
     g = pixel_color.y

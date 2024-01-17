@@ -2,15 +2,15 @@ import sys
 import math
 import time
 
-from utils import vec3, point3, rgb, normalize, cross, write_color, rand_on_hemisphere, rand_unit_vec, rand_in_unit_disk
-from utils import ray, interval, rand_float, deg_to_rad
-from hittable_list import hittable_list
-from hittable import hittable, hit_record
-from material import lambertian, metal
+from utils import Vector, Point, RGB, normalize, cross, write_color, rand_on_hemisphere, rand_unit_vec, rand_in_unit_disk
+from utils import Ray, Interval, rand_float, deg_to_rad
+from hittable_list import HittableList
+from hittable import Hittable, HitRecord
+from material import Lambertian, Metal
 
 class camera:
 
-    def __init__(self, aspect_ratio: float = 1.0, image_width: int = 100, samples_per_pixel: int = 10, max_depth: int = 10, vfov: float = 90, lookfrom: point3 = (0,0,-1), lookat: point3 = (0,0,0), vup: vec3 = vec3(0,1,0), defocus_angle: float = 0, focus_dist: float = 10) -> None:
+    def __init__(self, aspect_ratio: float = 1.0, image_width: int = 100, samples_per_pixel: int = 10, max_depth: int = 10, vfov: float = 90, lookfrom: Point = (0,0,-1), lookat: Point = (0,0,0), vup: Vector = Vector(0,1,0), defocus_angle: float = 0, focus_dist: float = 10) -> None:
         '''initializes camera public variables'''
 
         self.aspect_ratio: float = aspect_ratio # ratio of image width / height
@@ -29,7 +29,7 @@ class camera:
         # calculate image height (>= 1) (non-imaginary)
         self.image_height: int = max(int(self.image_width / self.aspect_ratio), 1)
 
-        self.center: point3 = lookfrom
+        self.center: Point = lookfrom
 
         # determine viewport dimensions
         # focal_length: float = (self.lookfrom - self.lookat).length()
@@ -39,30 +39,30 @@ class camera:
         viewport_width = viewport_height * (self.image_width/self.image_height)
 
         # calculate u, v, w unit basis vector for camera coordinate frame
-        self.w: vec3 = normalize(self.lookfrom - self.lookat)
-        self.u: vec3 = normalize(cross(self.vup, self.w))
+        self.w: Vector = normalize(self.lookfrom - self.lookat)
+        self.u: Vector = normalize(cross(self.vup, self.w))
         self.v = cross(self.w, self.u)
 
         # horizontal and vertical viewport edge guidance vectors
-        viewport_u: vec3 = viewport_width * self.u # vector across viewport horizontal edge
-        viewport_v: vec3 = viewport_height * -self.v # vector down viewport vertical edge
+        viewport_u: Vector = viewport_width * self.u # vector across viewport horizontal edge
+        viewport_v: Vector = viewport_height * -self.v # vector down viewport vertical edge
 
         # horizontal and vertical delta vectors (from pixel to pixel)
         # delta depends on number of pixels in image (1 per shift)
-        self.pixel_delta_u: vec3 = viewport_u / self.image_width
-        self.pixel_delta_v: vec3 = viewport_v / self.image_height
+        self.pixel_delta_u: Vector = viewport_u / self.image_width
+        self.pixel_delta_v: Vector = viewport_v / self.image_height
 
         # calculate location of upper left pixel
-        viewport_upper_left: point3 = self.center - (self.focus_dist * self.w) - viewport_u/2 - viewport_v/2
+        viewport_upper_left: Point = self.center - (self.focus_dist * self.w) - viewport_u/2 - viewport_v/2
         # not entirely sure why this next step is necessary, maybe to make sure the 00 pixel is within the vp?
-        self.pixel00_loc: point3  = viewport_upper_left + 0.5 * (self.pixel_delta_u + self.pixel_delta_v)
+        self.pixel00_loc: Point  = viewport_upper_left + 0.5 * (self.pixel_delta_u + self.pixel_delta_v)
 
         # calculate camera defocus disk basis vectors
         defocus_radius: float = self.focus_dist * math.tan(deg_to_rad(self.defocus_angle / 2))
-        self.defocus_disk_u: vec3 = self.u * defocus_radius # defocus disk horizontal radius
-        self.defocus_disk_v: vec3 = self.v * defocus_radius # defocus disk vertical radius
+        self.defocus_disk_u: Vector = self.u * defocus_radius # defocus disk horizontal radius
+        self.defocus_disk_v: Vector = self.v * defocus_radius # defocus disk vertical radius
 
-    def render(self, _world: hittable_list) -> None:
+    def render(self, _world: HittableList) -> None:
         '''dispatches rays into world uses results to construct rendered image'''
         start_time = time.time()
 
@@ -75,10 +75,10 @@ class camera:
 
             for i in range(self.image_width):
                 
-                pixel_color: rgb = rgb(0, 0, 0)
+                pixel_color: RGB = RGB(0, 0, 0)
                 for sample in range(0, self.samples_per_pixel):
-                    r: ray = self._get_ray(i, j)
-                    rc: rgb = self._ray_color(r, self.max_depth, _world)
+                    r: Ray = self._get_ray(i, j)
+                    rc: RGB = self._ray_color(r, self.max_depth, _world)
                     pixel_color = pixel_color + rc
 
                 write_color(sys.stdout, pixel_color, self.samples_per_pixel)
@@ -86,19 +86,19 @@ class camera:
         sys.stderr.write(f"\rDone.\nRender took {time.time() - start_time} seconds")
 
 
-    def _get_ray(self, i: int, j: int) -> ray:
+    def _get_ray(self, i: int, j: int) -> Ray:
         '''get a randomly-sampled camera ray for the pixel atl location (i, j), originating'''
         '''from the camera defocus'''
 
-        pixel_center: point3 = self.pixel00_loc + (i * self.pixel_delta_u) + (j * self.pixel_delta_v)
-        pixel_sample: point3 = pixel_center + self._pixel_sample_square()
+        pixel_center: Point = self.pixel00_loc + (i * self.pixel_delta_u) + (j * self.pixel_delta_v)
+        pixel_sample: Point = pixel_center + self._pixel_sample_square()
 
-        ray_origin: point3 = self.center if (self.defocus_angle <= 0) else self.defocus_disk_sample()
-        ray_dir: vec3 = pixel_sample - ray_origin
+        ray_origin: Point = self.center if (self.defocus_angle <= 0) else self.defocus_disk_sample()
+        ray_dir: Vector = pixel_sample - ray_origin
 
-        return ray(ray_origin, ray_dir)
+        return Ray(ray_origin, ray_dir)
     
-    def _pixel_sample_square(self) -> point3:
+    def _pixel_sample_square(self) -> Point:
         '''returns random point in square surrounding a pixel at origin'''
 
         px: float = -0.5 + rand_float()
@@ -106,26 +106,26 @@ class camera:
 
         return (px * self.pixel_delta_u) + (py * self.pixel_delta_v)
     
-    def defocus_disk_sample(self) -> point3:
+    def defocus_disk_sample(self) -> Point:
         '''returns random point in the camera defocus disk'''
-        p: point3 = rand_in_unit_disk()
+        p: Point = rand_in_unit_disk()
         return self.center + (p.x * self.defocus_disk_u) + (p.y * self.defocus_disk_v)
 
-    def _ray_color(self, _r: ray, depth: int, _world: hittable) -> rgb:
-        rec = hit_record()
+    def _ray_color(self, _r: Ray, depth: int, _world: Hittable) -> RGB:
+        rec = HitRecord()
 
         # if ray bounce limit exceeded, no more light gathered
         if depth <= 0:
-            return rgb(0, 0, 0)
+            return RGB(0, 0, 0)
 
         # this will check if object is hit AND update rec to nearest object (if hit)
-        if _world.hit(_r, interval(0.001, math.inf), rec):
-            scattered = ray()
-            attenuation = rgb(0, 0, 0)
+        if _world.hit(_r, Interval(0.001, math.inf), rec):
+            scattered = Ray()
+            attenuation = RGB(0, 0, 0)
             if rec.mat.scatter(_r, rec, attenuation, scattered):
                 return attenuation * self._ray_color(scattered, depth-1, _world)
-            return rgb(0, 0, 0)
+            return RGB(0, 0, 0)
 
         unit_dir = normalize(_r.dir)
         a = 0.5 * (unit_dir.y + 1.0)
-        return (1.0-a)*rgb(1.0, 1.0, 1.0) + a*rgb(0.5, 0.7, 1.0)
+        return (1.0-a)*RGB(1.0, 1.0, 1.0) + a*RGB(0.5, 0.7, 1.0)

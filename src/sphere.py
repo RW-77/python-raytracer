@@ -1,17 +1,17 @@
 import math
 
-from hittable import hittable, hit_record
-from material import material
-from utils import point3, dot
-from utils import ray, interval
+from hittable import Hittable, HitRecord
+from material import Material
+from utils import Point, dot
+from utils import Ray, Interval
 
-class sphere(hittable):
-    def __init__(self, center: point3, radius: float, mat: material) -> None:
+class Sphere(Hittable):
+    def __init__(self, center: Point, radius: float, mat: Material) -> None:
         self.center = center
         self.radius = radius
         self.mat = mat
     
-    def hit(self, _r: ray, ray_t: interval, rec: hit_record):
+    def hit(self, _r: Ray, ray_t: Interval, rec: HitRecord):
         oc = _r.orig - self.center
         a = _r.dir.length_squared()
         half_b = dot(oc, _r.dir)
