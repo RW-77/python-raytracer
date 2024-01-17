@@ -4,7 +4,7 @@ from utils import Interval
 from utils import Vector, RGB, Point, dot, cross, normalize, write_color, random
 from utils import Ray, rand_float
 from hittable_list import HittableList
-from camera import camera
+from camera import Camera
 from sphere import Sphere
 from material import Lambertian, Metal, Dielectric
 
@@ -61,7 +61,7 @@ def main():
     defocus_angle: float = 0.6
     focus_dist: float = 10.0
 
-    cam: camera = camera(aspect_ratio=aspect_ratio, image_width=image_width, samples_per_pixel=samples_per_pixel, max_depth=max_depth, vfov=vfov, lookfrom=lookfrom, lookat=lookat, vup=vup, defocus_angle=defocus_angle, focus_dist=focus_dist)
+    cam: Camera = Camera(aspect_ratio=aspect_ratio, image_width=image_width, samples_per_pixel=samples_per_pixel, max_depth=max_depth, vfov=vfov, lookfrom=lookfrom, lookat=lookat, vup=vup, defocus_angle=defocus_angle, focus_dist=focus_dist)
 
     cam.render(world)
     

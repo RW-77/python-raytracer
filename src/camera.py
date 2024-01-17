@@ -8,7 +8,7 @@ from hittable_list import HittableList
 from hittable import Hittable, HitRecord
 from material import Lambertian, Metal
 
-class camera:
+class Camera:
 
     def __init__(self, aspect_ratio: float = 1.0, image_width: int = 100, samples_per_pixel: int = 10, max_depth: int = 10, vfov: float = 90, lookfrom: Point = (0,0,-1), lookat: Point = (0,0,0), vup: Vector = Vector(0,1,0), defocus_angle: float = 0, focus_dist: float = 10) -> None:
         '''initializes camera public variables'''
