@@ -11,12 +11,13 @@ from material import Lambertian, Metal, Dielectric
 
 def main():
     
-    # Create World
+    # Create the world
     world: HittableList = HittableList()
 
     ground_material: Lambertian = Lambertian(RGB(0.5, 0.5, 0.5))
     world.add(Sphere(Point(0, -1000, 0), 1000, ground_material))
 
+    # Create and randomly position spheres of random material types into the scene
     for a in range(-11, 11):
         for b in range(-11, 11):
             choose_mat: float = rand_float()
@@ -35,16 +36,17 @@ def main():
                     sphere_material: Metal = Metal(albedo, fuzz)
                     world.add(Sphere(center, 0.2, sphere_material))
                 else:
-                    # glass
+                    # dielectric (glass)
                     sphere_material: Dielectric = Dielectric(1.5)
                     world.add(Sphere(center, 0.2, sphere_material))
 
+    # Sphere 1
     material1: Dielectric = Dielectric(1.5)
     world.add(Sphere(Point(0, 1, 0), 1.0, material1))
-
+    # Sphere 2
     material2: Lambertian = Lambertian(RGB(0.4, 0.2, 0.1))
     world.add(Sphere(Point(-4, 1, 0), 1.0, material2))
-
+    # Sphere 3
     material3: Metal = Metal(RGB(0.7, 0.6, 0.5), 0.0)
     world.add(Sphere(Point(4, 1, 0), 1.0, material3))
 
