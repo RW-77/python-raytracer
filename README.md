@@ -1,5 +1,5 @@
 # Python Raytracer
-A recursive brute-force path tracer written in python
+A recursive brute-force ray tracer written in python
 
 Image render using `pypy3` (~2800 secs):
 
