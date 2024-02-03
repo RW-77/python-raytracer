@@ -1,4 +1,5 @@
 from abc import ABC, abstractmethod
+from typing import Tuple
 
 from utils import Ray, Vector, Point, dot
 from utils import Interval
@@ -34,6 +35,7 @@ class HitRecord:
         TODO: If code is refactored to return hit_record instead of directly updating it, remove
         this function.
         """
+
         self.p = other.p
         self.normal = other.normal
         self.mat = other.mat
@@ -42,9 +44,9 @@ class HitRecord:
 
 class Hittable(ABC):
     """Abstract base class representing any object in the scene which is \"hittable\" by the ray."""
-
+    
     @abstractmethod
-    def hit(_r: Ray, ray_t: Interval, rec: HitRecord) -> bool:
+    def hit(_r: Ray, ray_t: Interval) -> (HitRecord | None):
         """
         TODO: Change after refactoring `hit` to return `HitRecord` object.
         """

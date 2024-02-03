@@ -40,10 +40,13 @@ class Vector:
         else:
             raise TypeError(Vector.te.format(op="vector addition") + f": {type(v)}")
 
-    def __radd__(self, v):
-        """Performs element-wise vector addition."""
+    # def __radd__(self, v):
+    #     """Performs element-wise vector addition."""
 
-        return self + v
+    #     if isinstance(v, Vector):
+    #         return Vector(self.x + v.x, self.y + v.y, self.z + v.z)
+    #     else:
+    #         raise TypeError(Vector.te.format(op="vector addition") + f": {type(v)}")
 
     def __iadd__(self, v):
         """Performs in-place element-wise vector addition."""

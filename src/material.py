@@ -16,7 +16,7 @@ class Material(ABC):
     """
 
     @abstractmethod
-    def scatter(_ray_in: Ray, _rec: HitRecord, attenuation: RGB, scattered: Ray): 
+    def scatter(_ray_in: Ray, _rec: HitRecord, attenuation: RGB, scattered: Ray) -> (tuple[RGB, Ray] | None): 
         '''
         Based on an incident ray and `HitRecord` (holding information about the ray-object intersection),
         calculates for respective material the outgoing ray and attenuation (intensity) of that ray
@@ -44,7 +44,7 @@ class Lambertian(Material):
     def __init__(self, albedo: RGB) -> None:
         self.albedo = albedo
     
-    def scatter(self, _ray_in: Ray, _rec: HitRecord, attenuation: RGB, scattered: Ray) -> bool:
+    def scatter(self, _ray_in: Ray, _rec: HitRecord) -> tuple[RGB, Ray]:
         """
         Creates scatter ray using Lambertian reflectance in which a ray has a cos(phi) probability of
         being scattered at angle that is phi from the surface normal.
@@ -70,15 +70,11 @@ class Lambertian(Material):
         if scatter_dir.near_zero():
             scatter_dir = _rec.normal
 
-        scattered.orig = _rec.p
-        scattered.dir = scatter_dir
-
         # NOTE: scatter should handle the scattering of the ray, but it makes more sense for ray_color to handle the mixing of color values
-        attenuation.x = self.albedo.x
-        attenuation.y = self.albedo.y
-        attenuation.z = self.albedo.z
+        scattered = Ray(_rec.p, scatter_dir)
+        attenuation = RGB(self.albedo.x, self.albedo.y, self.albedo.z)
          
-        return True
+        return attenuation, scattered
     
 class Metal(Material):
     """
@@ -89,7 +85,7 @@ class Metal(Material):
         self.albedo: RGB = albedo
         self.fuzz: float = min(fuzz, 1.0)
 
-    def scatter(self, _ray_in: Ray, _rec: HitRecord, attenuation: RGB, scattered: Ray) -> bool:
+    def scatter(self, _ray_in: Ray, _rec: HitRecord) -> (tuple[RGB, Ray] | None):
         """
         Reflects incident ray about surface normal vector. A fuzz factor is used to add slight randomness to the 
         reflected rays. The incident ray is reflected and then normalized. A sphere with radius `fuzz` is centered
@@ -108,22 +104,19 @@ class Metal(Material):
         """
         reflected: Vector = reflect(normalize(_ray_in.dir), _rec.normal)
         
-        scattered.orig = _rec.p
-        scattered.dir = reflected + self.fuzz*rand_unit_vec()
+        scattered = Ray(_rec.p, reflected + self.fuzz*rand_unit_vec())
+        attenuation = RGB(self.albedo.x, self.albedo.y, self.albedo.z)
 
-        attenuation.x = self.albedo.x
-        attenuation.y = self.albedo.y
-        attenuation.z = self.albedo.z
-
-        # surface absorbs rays that scatter below it
-        return dot(scattered.dir, _rec.normal) > 0.0
+        # if the ray is scattered below the surface, then it is absorbed in which case nothing is returned
+        return (attenuation, scattered) if dot(scattered.dir, _rec.normal) > 0.0 else None
     
 class Dielectric(Material):
     """
     Material type which models dielectric surfaces. Light is absored or transmitted 
     rather than automatically reflected by the surface. Absorbance and reemiittance is dictated by Snell's Law and Fresnel equations
 
-    Note: this class is limited in encapsulating all dielectric materials. It assumes colorlessness (no albedo) and transparency (attenuation set to (1, 1, 1)). So basically just clear glass for now.
+    Note: this class is limited in encapsulating all dielectric materials. It assumes colorlessness (no albedo) and transparency 
+    (attenuation set to (1, 1, 1)). So basically just clear glass for now.
     """
 
     def __init__(self, refractive_index) -> None:
@@ -136,15 +129,12 @@ class Dielectric(Material):
         r0 = r0*r0
         return r0 + (1-r0)*math.pow((1-cosine), 5)
     
-    def scatter(self, _ray_in: Ray, _rec: HitRecord, attenuation: RGB, scattered: Ray) -> bool:
+    def scatter(self, _ray_in: Ray, _rec: HitRecord) -> tuple[RGB, Ray]:
         """
         Calculates outgoing ray based on the refractive index of the dielectric material, the ray, and hit information, assuming incident ray is transitioning from air (refractive index of 1).
         The ray is reflected and possibly refracted depending on the refraction ratio and incident angle.
         """
 
-        attenuation.x = 1.0
-        attenuation.y = 1.0
-        attenuation.z = 1.0
         # assumes ray is transitioning to or from air medium (refractive index of 1.0)
         refraction_ratio: float = (1.0/self.ir) if _rec.front_face else self.ir
 
@@ -162,7 +152,8 @@ class Dielectric(Material):
             # can refract
             direction: Vector = refract(unit_dir, _rec.normal, refraction_ratio)
 
-        scattered.orig = _rec.p
-        scattered.dir = direction
+        # assume complete colorlessness
+        attenuation = RGB(1.0, 1.0, 1.0)
+        scattered = Ray(_rec.p, direction)
 
-        return True
+        return attenuation, scattered

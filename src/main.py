@@ -51,9 +51,9 @@ def main():
     world.add(Sphere(Point(4, 1, 0), 1.0, material3))
 
     aspect_ratio: float = 16.0/9.0
-    image_width: int = 1200
-    samples_per_pixel: int = 500
-    max_depth: int = 50
+    image_width: int = 600
+    samples_per_pixel: int = 250
+    max_depth: int = 25
 
     vfov: float = 20
     lookfrom: Point = Point(13, 2, 3)
@@ -63,7 +63,8 @@ def main():
     defocus_angle: float = 0.6
     focus_dist: float = 10.0
 
-    cam: Camera = Camera(aspect_ratio=aspect_ratio, image_width=image_width, samples_per_pixel=samples_per_pixel, max_depth=max_depth, vfov=vfov, lookfrom=lookfrom, lookat=lookat, vup=vup, defocus_angle=defocus_angle, focus_dist=focus_dist)
+    cam: Camera = Camera(aspect_ratio=aspect_ratio, image_width=image_width, samples_per_pixel=samples_per_pixel, max_depth=max_depth, 
+                         vfov=vfov, lookfrom=lookfrom, lookat=lookat, vup=vup, defocus_angle=defocus_angle, focus_dist=focus_dist)
 
     cam.render(world)
     

@@ -1,6 +1,7 @@
 import sys
 import math
 import time
+from typing import Union
 
 from utils import Vector, Point, RGB, normalize, cross, write_color, rand_on_hemisphere, rand_unit_vec, rand_in_unit_disk
 from utils import Ray, Interval, rand_float, deg_to_rad
@@ -80,15 +81,17 @@ class Camera:
 
             sys.stderr.write(f"\rScanlines remaining: {self.image_height-j} ")
             for i in range(self.image_width):
-                
-                pixel_color: RGB = RGB(0, 0, 0)
+
+                # intial pixel_color is black
+                pixel_color = RGB(0, 0, 0)
                 # Collect random sample around original pixel for antialiasing
                 for sample in range(0, self.samples_per_pixel):
                     
-                    r: Ray = self.rand_pixel_ray(i, j)
-                    rc: RGB = self.ray_color(r, self.max_depth, _world)
+                    sample_ray: Ray = self.rand_pixel_ray(i, j)
+                    sample_ray_color: RGB = self.ray_color(sample_ray, self.max_depth, _world)
                     # summing colors to be blended (averaged) in write_color
-                    pixel_color = pixel_color + rc
+
+                    pixel_color = pixel_color + sample_ray_color
                 # write_color divides total color sum by sample size for averaging
                 write_color(sys.stdout, pixel_color, self.samples_per_pixel)
 
@@ -97,7 +100,7 @@ class Camera:
 
     def rand_pixel_ray(self, i: int, j: int) -> Ray:
         """
-        Get a randomly-sampled camera ray for the pixel at location (i, j), originating from the camera defocus
+        Get a randomly-sampled camera ray for the pixel at location (i, j), originating from the camera defocus.
         """
         # Computes the coordinates of the point at (i, j)
         pixel_center: Point = self.pixel00_loc + (i * self.pixel_delta_u) + (j * self.pixel_delta_v)
@@ -106,7 +109,7 @@ class Camera:
 
         ray_origin: Point = self.center if (self.defocus_angle <= 0) else self.defocus_disk_sample()
         ray_dir: Vector = pixel_sample - ray_origin
-
+        
         return Ray(ray_origin, ray_dir)
     
     def pixel_sample_square(self) -> Point:
@@ -135,25 +138,24 @@ class Camera:
         Returns the RGB color value for a ray `_r` that has been shot into `_world`. Since this function is recursive
         we restrict the maximum recursion depth after which the ray will return `RGB(0, 0, 0)`.
         """
-        # TODO: remove and store returned function value instead
-        rec = HitRecord()
 
-        # if ray bounce limit exceeded, no more light gathered
+        # if ray bounce limit exceeded, no more light is gathered
         if depth <= 0:
             return RGB(0, 0, 0)
 
         # check if object is hit AND update rec to hold the information of the nearest object (if hit)
-        if _world.hit(_r, Interval(0.001, math.inf), rec):
+        # HACK: refactoring
+        rec = _world.hit(_r, Interval(0.001, math.inf)) or None
+        if rec is not None:
 
-            # TODO: Refactor to: hit (bool), scattered, attenuation = rec.mat.scatter(args), then check hit
-            scattered = Ray()
-            attenuation = RGB(0, 0, 0)
-            if rec.mat.scatter(_r, rec, attenuation, scattered):
-                # attenuation represents the color returned by the object (set to albedo for colored objects)
-                # mixing occurs through element-wise multiplication of color values
+            rec: HitRecord
+            attenuation, scattered = rec.mat.scatter(_r, rec) or (None, None)
+
+            # rays are not scattered in all scenarios
+            if attenuation is not None and scattered is not None:
                 return attenuation * self.ray_color(scattered, depth-1, _world)
-            
-            return RGB(0, 0, 0)
+            else:
+                return RGB(0, 0, 0)
 
         # if the ray does not hit any objects in the scene, then the background (sky) is colored using a gradient
         unit_dir = normalize(_r.dir)
