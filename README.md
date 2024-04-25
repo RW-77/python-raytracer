@@ -1,5 +1,7 @@
 # Python Raytracer
-A recursive ray tracer written in python
+A basic ray tracer written in python
+- supports spheres
+- simple BVH
 
 Image render using `pypy3` (~2800 secs):
 
