@@ -7,7 +7,7 @@ class Ray:
     """
 
     def __init__(self, origin: Point = None, direction: Vector = None):
-        self.orig: Point = origin
+        self.origin: Point = origin
         self.dir: Vector = direction
 
     def __repr__(self) -> str:
@@ -18,4 +18,4 @@ class Ray:
     def at(self, t) -> Vector:
         """Returns the point at `t` along the `ray`."""
 
-        return self.orig + t*self.dir
+        return self.origin + t*self.dir

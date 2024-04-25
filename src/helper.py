@@ -15,3 +15,10 @@ def rand_float(lower_b: float = None, upper_b: float = None) -> float:
         return lower_b + (upper_b - lower_b) * random_float
     else:
         return random_float
+    
+def min_max(a: float, b: float) -> tuple[float, float]:
+    """
+    Returns a tuple, where the first element is `min(a, b)` and the second 
+    element is `max(a, b)`.
+    """
+    return min(a, b), max(a, b)

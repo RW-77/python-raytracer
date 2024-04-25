@@ -1,7 +1,7 @@
 import random
 import math
 
-from helper import deg_to_rad, rand_float
+from helper import deg_to_rad, rand_float, min_max
 from interval import Interval
 from ray import Ray
 from vec3 import Vector, RGB, Point, dot, cross, normalize, write_color

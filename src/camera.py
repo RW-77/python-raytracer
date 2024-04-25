@@ -17,7 +17,7 @@ class Camera:
     """
 
     def __init__(self, aspect_ratio: float = 1.0, image_width: int = 100, samples_per_pixel: int = 10, max_depth: int = 10, 
-                 vfov: float = 90, lookfrom: Point = (0,0,-1), lookat: Point = (0,0,0), vup: Vector = Vector(0,1,0), defocus_angle: float = 0, focus_dist: float = 10) -> None:
+                 vfov: float = 90, lookfrom: Point = Point(0,0,-1), lookat: Point = Point(0,0,0), vup: Vector = Vector(0,1,0), defocus_angle: float = 0.0, focus_dist: float = 10.0) -> None:
 
         self.aspect_ratio: float = aspect_ratio # ratio of image width / height
         self.image_width: int = image_width # rendered image width (pixel count)
@@ -25,12 +25,12 @@ class Camera:
         self.max_depth: int = max_depth
 
         self.vfov: float = vfov
-        self.lookfrom = lookfrom
-        self.lookat = lookat
-        self.vup = vup
+        self.lookfrom: Point = lookfrom
+        self.lookat: Point = lookat
+        self.vup: Vector = vup
 
         self.defocus_angle: float = defocus_angle # variation angle of rays through each pixel
-        self.focus_dist: float = focus_dist # distasnce from camera lookfrom point to plane of perfect focus
+        self.focus_dist: float = focus_dist # distance from camera `lookfrom` point to plane of perfect focus
 
         # calculate image height (>= 1) (non-imaginary)
         self.image_height: int = max(int(self.image_width / self.aspect_ratio), 1)
@@ -42,7 +42,7 @@ class Camera:
         theta: float = deg_to_rad(vfov)
         h = math.tan(theta/2)
         viewport_height = 2 * h * self.focus_dist
-        viewport_width = viewport_height * (self.image_width/self.image_height)
+        viewport_width = viewport_height * (self.image_width/self.image_height) 
 
         # calculate u, v, w unit basis vector for camera coordinate frame
         self.w: Vector = normalize(self.lookfrom - self.lookat)
@@ -82,11 +82,16 @@ class Camera:
             sys.stderr.write(f"\rScanlines remaining: {self.image_height-j} ")
             for i in range(self.image_width):
 
-                # intial pixel_color is black
+                # if not (j == int(self.image_height*0.5) and i == self.image_width * (2/3)):
+                #     continue
+
+                # initial pixel_color is black
                 pixel_color = RGB(0, 0, 0)
                 # Collect random sample around original pixel for antialiasing
                 for sample in range(0, self.samples_per_pixel):
-                    
+                    # DEBUG
+                    # sys.stderr.write(f"Pixel ({i}, {j}): Sample {sample}\n")
+
                     sample_ray: Ray = self.rand_pixel_ray(i, j)
                     sample_ray_color: RGB = self.ray_color(sample_ray, self.max_depth, _world)
                     # summing colors to be blended (averaged) in write_color
@@ -95,8 +100,7 @@ class Camera:
                 # write_color divides total color sum by sample size for averaging
                 write_color(sys.stdout, pixel_color, self.samples_per_pixel)
 
-        sys.stderr.write(f"\rDone.\nRender took {time.time() - start_time} seconds")
-
+        sys.stderr.write(f"\rDone. Render took {time.time() - start_time} seconds.\n")
 
     def rand_pixel_ray(self, i: int, j: int) -> Ray:
         """
@@ -104,12 +108,13 @@ class Camera:
         """
         # Computes the coordinates of the point at (i, j)
         pixel_center: Point = self.pixel00_loc + (i * self.pixel_delta_u) + (j * self.pixel_delta_v)
-        # Computes the 
+        # Computes the coordinates of the sampled pixel around (i, j)
         pixel_sample: Point = pixel_center + self.pixel_sample_square()
-
-        ray_origin: Point = self.center if (self.defocus_angle <= 0) else self.defocus_disk_sample()
-        ray_dir: Vector = pixel_sample - ray_origin
         
+        ray_origin: Point = self.center if (self.defocus_angle <= 0) else self.defocus_disk_sample()
+        # Compute vector to sample pixel
+        ray_dir: Vector = pixel_sample - ray_origin
+
         return Ray(ray_origin, ray_dir)
     
     def pixel_sample_square(self) -> Point:
@@ -144,20 +149,24 @@ class Camera:
             return RGB(0, 0, 0)
 
         # check if object is hit AND update rec to hold the information of the nearest object (if hit)
-        # HACK: refactoring
         rec = _world.hit(_r, Interval(0.001, math.inf)) or None
         if rec is not None:
 
-            rec: HitRecord
-            attenuation, scattered = rec.mat.scatter(_r, rec) or (None, None)
+            # DEBUG
+            # sys.stderr.write("`rec` info:\n")
+            # sys.stderr.write(str(rec) + "\n")
 
-            # rays are not scattered in all scenarios
+            attenuation, scattered = rec.mat.scatter(_r, rec) or (None, None)
+            
+            # rays are not scattered in all scenarios (can be absorbed for instance)
             if attenuation is not None and scattered is not None:
                 return attenuation * self.ray_color(scattered, depth-1, _world)
             else:
                 return RGB(0, 0, 0)
+        else:
+            # sys.stderr.write("`rec` is `None`:\n")
 
-        # if the ray does not hit any objects in the scene, then the background (sky) is colored using a gradient
-        unit_dir = normalize(_r.dir)
-        a = 0.5 * (unit_dir.y + 1.0)
-        return (1.0-a)*RGB(1.0, 1.0, 1.0) + a*RGB(0.5, 0.7, 1.0)
+            # if the ray does not hit any objects in the scene, then the background (sky) is colored using a gradient
+            unit_dir = normalize(_r.dir)
+            a = 0.5 * (unit_dir.y + 1.0)
+            return (1.0-a)*RGB(1.0, 1.0, 1.0) + a*RGB(0.5, 0.7, 1.0)

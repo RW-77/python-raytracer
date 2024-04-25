@@ -1,0 +1,373 @@
+BVH Tree Constructed
+__________________________________________________
+bbox: 
+slab_x = [-1000, 1000]
+slab_y = [-2000, 3.0]
+slab_z = [-1000, 1000]
+
+left: 
+<class 'bvh.BVH_Node'>
+
+right: 
+<class 'bvh.BVH_Node'>
+
+__________________________________________________
+__________________________________________________
+bbox: 
+slab_x = [-1000, 1000]
+slab_y = [-2000, 3.0]
+slab_z = [-1000, 1000]
+
+left: 
+<class 'bvh.BVH_Node'>
+
+right: 
+<class 'bvh.BVH_Node'>
+
+__________________________________________________
+__________________________________________________
+bbox: 
+slab_x = [-2.1767573685299397, 2.0]
+slab_y = [-1.0, 3.0]
+slab_z = [-0.8394074082270426, 4.0]
+
+left: 
+<class 'bvh.BVH_Node'>
+
+right: 
+<class 'bvh.BVH_Node'>
+
+__________________________________________________
+__________________________________________________
+bbox: 
+slab_x = [-1000, 1000]
+slab_y = [-2000, 3.0]
+slab_z = [-1000, 1000]
+
+left: 
+<class 'bvh.BVH_Node'>
+
+right: 
+<class 'bvh.BVH_Node'>
+
+__________________________________________________
+__________________________________________________
+bbox: 
+slab_x = [-5.0, 5.0]
+slab_y = [0.0, 2.0]
+slab_z = [-1.5155167988356595, 1.0]
+
+left: 
+<class 'bvh.BVH_Node'>
+
+right: 
+<class 'bvh.BVH_Node'>
+
+__________________________________________________
+__________________________________________________
+bbox: 
+slab_x = [-2.1767573685299397, 2.0]
+slab_y = [-1.0, 3.0]
+slab_z = [-0.8394074082270426, 4.0]
+
+left: 
+<class 'bvh.BVH_Node'>
+
+right: 
+<class 'bvh.BVH_Node'>
+
+__________________________________________________
+__________________________________________________
+bbox: 
+slab_x = [-0.5640972529586217, 1.4921127371911298]
+slab_y = [0.0, 0.4]
+slab_z = [-0.7370692873431013, 1.5794731272730334]
+
+left: 
+<class 'bvh.BVH_Node'>
+
+right: 
+<class 'bvh.BVH_Node'>
+
+__________________________________________________
+__________________________________________________
+bbox: 
+slab_x = [-1000, 1000]
+slab_y = [-2000, 3.0]
+slab_z = [-1000, 1000]
+
+left: 
+<class 'sphere.Sphere'>
+
+right: 
+<class 'sphere.Sphere'>
+
+__________________________________________________
+__________________________________________________
+bbox: 
+slab_x = [-1.0417971019279486, 1.756348630016932]
+slab_y = [0.0, 0.4]
+slab_z = [-2.0873683005809593, -1.2783492202837932]
+
+left: 
+<class 'bvh.BVH_Node'>
+
+right: 
+<class 'bvh.BVH_Node'>
+
+__________________________________________________
+__________________________________________________
+bbox: 
+slab_x = [-5.0, 1.0]
+slab_y = [0.0, 2.0]
+slab_z = [-1.5155167988356595, 1.0]
+
+left: 
+<class 'bvh.BVH_Node'>
+
+right: 
+<class 'bvh.BVH_Node'>
+
+__________________________________________________
+__________________________________________________
+bbox: 
+slab_x = [-0.4604322492331941, 5.0]
+slab_y = [0.0, 2.0]
+slab_z = [-1.1277857590389386, 1.0]
+
+left: 
+<class 'bvh.BVH_Node'>
+
+right: 
+<class 'bvh.BVH_Node'>
+
+__________________________________________________
+__________________________________________________
+bbox: 
+slab_x = [-2.1767573685299397, 2.0]
+slab_y = [-1.0, 3.0]
+slab_z = [0.0, 4.0]
+
+left: 
+<class 'sphere.Sphere'>
+
+right: 
+<class 'sphere.Sphere'>
+
+__________________________________________________
+__________________________________________________
+bbox: 
+slab_x = [-1.8914729808478243, -0.574096587383865]
+slab_y = [0.0, 0.4]
+slab_z = [-0.8394074082270426, 1.810776269646382]
+
+left: 
+<class 'bvh.BVH_Node'>
+
+right: 
+<class 'bvh.BVH_Node'>
+
+__________________________________________________
+__________________________________________________
+bbox: 
+slab_x = [-0.5640972529586217, 0.8547935909502009]
+slab_y = [0.0, 0.4]
+slab_z = [0.02980658882939144, 1.5794731272730334]
+
+left: 
+<class 'bvh.BVH_Node'>
+
+right: 
+<class 'bvh.BVH_Node'>
+
+__________________________________________________
+__________________________________________________
+bbox: 
+slab_x = [0.8510642334064766, 1.4921127371911298]
+slab_y = [0.0, 0.4]
+slab_z = [-0.7370692873431013, 1.5433588865983356]
+
+left: 
+<class 'bvh.BVH_Node'>
+
+right: 
+<class 'bvh.BVH_Node'>
+
+__________________________________________________
+__________________________________________________
+bbox: 
+slab_x = [-1.0417971019279486, -0.6417971019279485]
+slab_y = [0.0, 0.4]
+slab_z = [-2.0873683005809593, -1.6873683005809592]
+
+left: 
+<class 'sphere.Sphere'>
+
+right: 
+<class 'sphere.Sphere'>
+
+__________________________________________________
+__________________________________________________
+bbox: 
+slab_x = [0.682565423330348, 1.756348630016932]
+slab_y = [0.0, 0.4]
+slab_z = [-1.9614888050895294, -1.2783492202837932]
+
+left: 
+<class 'sphere.Sphere'>
+
+right: 
+<class 'sphere.Sphere'>
+
+__________________________________________________
+__________________________________________________
+bbox: 
+slab_x = [-5.0, -3.0]
+slab_y = [0.0, 2.0]
+slab_z = [-1.0, 1.0]
+
+left: 
+<class 'sphere.Sphere'>
+
+right: 
+<class 'sphere.Sphere'>
+
+__________________________________________________
+__________________________________________________
+bbox: 
+slab_x = [-1.8711969394940868, 1.0]
+slab_y = [0.0, 2.0]
+slab_z = [-1.5155167988356595, 1.0]
+
+left: 
+<class 'sphere.Sphere'>
+
+right: 
+<class 'sphere.Sphere'>
+
+__________________________________________________
+__________________________________________________
+bbox: 
+slab_x = [-0.4604322492331941, -0.06043224923319407]
+slab_y = [0.0, 0.4]
+slab_z = [-1.1277857590389386, -0.7277857590389385]
+
+left: 
+<class 'sphere.Sphere'>
+
+right: 
+<class 'sphere.Sphere'>
+
+__________________________________________________
+__________________________________________________
+bbox: 
+slab_x = [0.0812126861932222, 5.0]
+slab_y = [0.0, 2.0]
+slab_z = [-1.0850598921017707, 1.0]
+
+left: 
+<class 'sphere.Sphere'>
+
+right: 
+<class 'sphere.Sphere'>
+
+__________________________________________________
+__________________________________________________
+bbox: 
+slab_x = [-1.8914729808478243, -1.4914729808478244]
+slab_y = [0.0, 0.4]
+slab_z = [-0.8394074082270426, -0.43940740822704266]
+
+left: 
+<class 'sphere.Sphere'>
+
+right: 
+<class 'sphere.Sphere'>
+
+__________________________________________________
+__________________________________________________
+bbox: 
+slab_x = [-1.4095663337680457, -0.574096587383865]
+slab_y = [0.0, 0.4]
+slab_z = [0.42445045498657413, 1.810776269646382]
+
+left: 
+<class 'sphere.Sphere'>
+
+right: 
+<class 'sphere.Sphere'>
+
+__________________________________________________
+__________________________________________________
+bbox: 
+slab_x = [-0.5640972529586217, -0.1640972529586217]
+slab_y = [0.0, 0.4]
+slab_z = [1.1794731272730334, 1.5794731272730334]
+
+left: 
+<class 'sphere.Sphere'>
+
+right: 
+<class 'sphere.Sphere'>
+
+__________________________________________________
+__________________________________________________
+bbox: 
+slab_x = [0.35077317780128386, 0.8547935909502009]
+slab_y = [0.0, 0.4]
+slab_z = [0.02980658882939144, 1.4266548812091608]
+
+left: 
+<class 'sphere.Sphere'>
+
+right: 
+<class 'sphere.Sphere'>
+
+__________________________________________________
+__________________________________________________
+bbox: 
+slab_x = [1.0877206872798748, 1.4877206872798747]
+slab_y = [0.0, 0.4]
+slab_z = [-0.7370692873431013, -0.3370692873431012]
+
+left: 
+<class 'sphere.Sphere'>
+
+right: 
+<class 'sphere.Sphere'>
+
+__________________________________________________
+__________________________________________________
+bbox: 
+slab_x = [0.8510642334064766, 1.4921127371911298]
+slab_y = [0.0, 0.4]
+slab_z = [0.03612238255095393, 1.5433588865983356]
+
+left: 
+<class 'sphere.Sphere'>
+
+right: 
+<class 'sphere.Sphere'>
+
+__________________________________________________
+Scanlines remaining: 168 Scanlines remaining: 167 Scanlines remaining: 166 Scanlines remaining: 165 Scanlines remaining: 164 Scanlines remaining: 163 Scanlines remaining: 162 Scanlines remaining: 161 Scanlines remaining: 160 Scanlines remaining: 159 Scanlines remaining: 158 Scanlines remaining: 157 Scanlines remaining: 156 Scanlines remaining: 155 Scanlines remaining: 154 Scanlines remaining: 153 Scanlines remaining: 152 Scanlines remaining: 151 Scanlines remaining: 150 Scanlines remaining: 149 Scanlines remaining: 148 Scanlines remaining: 147 Scanlines remaining: 146 Scanlines remaining: 145 Scanlines remaining: 144 Scanlines remaining: 143 Scanlines remaining: 142 Scanlines remaining: 141 Scanlines remaining: 140 Scanlines remaining: 139 Scanlines remaining: 138 Scanlines remaining: 137 Scanlines remaining: 136 Scanlines remaining: 135 Scanlines remaining: 134 Scanlines remaining: 133 Scanlines remaining: 132 Scanlines remaining: 131 Scanlines remaining: 130 Scanlines remaining: 129 Scanlines remaining: 128 Scanlines remaining: 127 Scanlines remaining: 126 Scanlines remaining: 125 Scanlines remaining: 124 Scanlines remaining: 123 Scanlines remaining: 122 Scanlines remaining: 121 Scanlines remaining: 120 Scanlines remaining: 119 Scanlines remaining: 118 Scanlines remaining: 117 Scanlines remaining: 116 Scanlines remaining: 115 Scanlines remaining: 114 Scanlines remaining: 113 Scanlines remaining: 112 Scanlines remaining: 111 Scanlines remaining: 110 Scanlines remaining: 109 Scanlines remaining: 108 Scanlines remaining: 107 Scanlines remaining: 106 Scanlines remaining: 105 Scanlines remaining: 104 Scanlines remaining: 103 Scanlines remaining: 102 Scanlines remaining: 101 Scanlines remaining: 100 Scanlines remaining: 99 Scanlines remaining: 98 Scanlines remaining: 97 Scanlines remaining: 96 Scanlines remaining: 95 Scanlines remaining: 94 Scanlines remaining: 93 Scanlines remaining: 92 Scanlines remaining: 91 Scanlines remaining: 90 Scanlines remaining: 89 Scanlines remaining: 88 Scanlines remaining: 87 Scanlines remaining: 86 Scanlines remaining: 85 Scanlines remaining: 84 Traceback (most recent call last):
+  File "/Users/caleb/Documents/Projects/raytracer/src/main.py", line 96, in <module>
+    main()
+  File "/Users/caleb/Documents/Projects/raytracer/src/main.py", line 89, in main
+    cam.render(world)
+  File "/Users/caleb/Documents/Projects/raytracer/src/camera.py", line 96, in render
+    sample_ray_color: RGB = self.ray_color(sample_ray, self.max_depth, _world)
+                            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/caleb/Documents/Projects/raytracer/src/camera.py", line 152, in ray_color
+    rec = _world.hit(_r, Interval(0.001, math.inf)) or None
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/caleb/Documents/Projects/raytracer/src/hittable_list.py", line 48, in hit
+    rec = self.objects[0].hit(_r, Interval(ray_t.lower_b, t_closest)) or None
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/caleb/Documents/Projects/raytracer/src/bvh.py", line 95, in hit
+    return rec
+               
+  File "/Users/caleb/Documents/Projects/raytracer/src/bvh.py", line 41, in hit
+    rec_left: HitRecord | None = self.left.hit(_r, ray_t)
+                                 ^^^^
+KeyboardInterrupt
