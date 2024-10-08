@@ -6,3 +6,9 @@ final_render.png
 *.ppm
 past_renders/lambertian/gamma_ppm
 past_renders/lambertian/linear_ppm
+
+# macOS specific file
+.DS_Store
+
+# Jetbrains
+.idea/
