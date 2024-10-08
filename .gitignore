@@ -12,3 +12,6 @@ past_renders/lambertian/linear_ppm
 
 # Jetbrains
 .idea/
+
+# Python cache
+__pycache__/
